@@ -15,7 +15,7 @@ import io.reactivex.Observable
 
 class RemoteDataSource(var bitcoinService: BitcoinService){
 
-    fun getMarketPrice(timespan : String, rollingAverage : String) : Observable<TypeResponse<BitcoinResponse>> {
+    fun getMarketPrice(timespan : String?, rollingAverage : String?) : Observable<TypeResponse<BitcoinResponse>> {
         return bitcoinService.getMarketPrice(timespan, rollingAverage).map {
                 response -> if(response.isSuccessful && response.body() != null){
             DataResponse(response.body()!!.toEntity())

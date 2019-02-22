@@ -12,5 +12,5 @@ import retrofit2.http.Query
 
 interface BitcoinService{
     @GET("/charts/market-price?format=json")
-    fun getMarketPrice(@Query("timespan") timespan : String, @Query("rollingAverage") rollingAverage : String) : Observable<Response<RestBitcoinResponse>>
+    fun getMarketPrice(@Query("timespan") timespan : String?, @Query("rollingAverage") rollingAverage : String?) : Observable<Response<RestBitcoinResponse>>
 }

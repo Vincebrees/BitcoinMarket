@@ -1,5 +1,6 @@
-package com.github.vincebrees.bitcoinmarket.injection
+package com.github.vincebrees.bitcoinmarket.di
 
+import android.content.Context
 import com.github.vincebrees.bitcoinmarket.BuildConfig
 import com.github.vincebrees.bitcoinmarket.data.remote.BitcoinService
 import com.github.vincebrees.bitcoinmarket.data.remote.RemoteDataSource
@@ -7,8 +8,10 @@ import com.github.vincebrees.bitcoinmarket.data.repository.BitcoinRepositoryImpl
 import com.github.vincebrees.bitcoinmarket.domain.interactors.GetMarketPriceUseCase
 import com.github.vincebrees.bitcoinmarket.domain.repository.BitcoinRepository
 import com.github.vincebrees.bitcoinmarket.presentation.marketprice.MarketPriceViewModel
+import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
@@ -27,7 +30,9 @@ val appModule = module {
 
     single { RemoteDataSource(get()) }
 
-    single { createOkHttpClient() }
+    single { createOkHttpClient(get()) }
+
+    single { createCache(androidContext()) }
 
     single { createWebService<BitcoinService>(get(), BuildConfig.ENDPOINT) }
 
@@ -44,15 +49,21 @@ val domainModule = module {
 }
 
 
-fun createOkHttpClient(): OkHttpClient {
+fun createOkHttpClient(cache : Cache): OkHttpClient {
     val httpLoggingInterceptor = HttpLoggingInterceptor()
     httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
     return OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
+        .cache(cache)
         .addInterceptor(httpLoggingInterceptor)
         .build()
+}
+
+fun createCache(context: Context): Cache {
+    val cacheSize: Long = 10 * 1024 * 1024 //10Mo
+    return Cache(context.cacheDir, cacheSize)
 }
 
 inline fun <reified T> createWebService(okHttpClient: OkHttpClient, url: String): T {

@@ -41,6 +41,8 @@ android {
         def koin_version = "1.0.2"
         def androidx_compat_version = '1.0.1'
 
+        def chart_version = 'v3.1.0-alpha'
+
         def material_version = '1.0.0'
         def vector_version = '1.0.1'
         def constraint_version = '2.0.0-alpha3'
@@ -74,6 +76,9 @@ android {
 
         implementation 'com.squareup.okhttp3:okhttp:' + okhttp_version
         implementation 'com.squareup.okhttp3:logging-interceptor:' + okhttp_version
+
+        //============Chart Library=================
+        implementation 'com.github.PhilJay:MPAndroidChart:' + chart_version
 
         //============Support Libraries=================
         implementation 'androidx.appcompat:appcompat:' + androidx_compat_version

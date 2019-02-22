@@ -9,5 +9,5 @@ import io.reactivex.Observable
  */
 
 interface BitcoinRepository{
-    fun getMarketPrice(timespan: String, rollingAverage: String): Observable<TypeResponse<BitcoinResponse>>
+    fun getMarketPrice(timespan: String?, rollingAverage: String?): Observable<TypeResponse<BitcoinResponse>>
 }

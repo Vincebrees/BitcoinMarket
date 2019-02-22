@@ -13,7 +13,7 @@ import io.reactivex.Observable
 
 class BitcoinRepositoryImpl(var remoteDataSource: RemoteDataSource) : BitcoinRepository {
 
-    override fun getMarketPrice(timespan: String, rollingAverage: String): Observable<TypeResponse<BitcoinResponse>> {
+    override fun getMarketPrice(timespan: String?, rollingAverage: String?): Observable<TypeResponse<BitcoinResponse>> {
         return remoteDataSource.getMarketPrice(timespan, rollingAverage)
     }
 }
