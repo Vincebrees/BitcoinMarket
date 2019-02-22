@@ -1,0 +1,10 @@
+package com.github.vincebrees.bitcoinmarket.domain.entity
+
+/**
+ * Created by Vincent ETIENNE on 22/02/2019.
+ */
+
+data class Coordonate(
+    var x : Double,
+    var y : Double
+)
