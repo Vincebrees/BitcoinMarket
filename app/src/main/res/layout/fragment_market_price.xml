@@ -15,4 +15,74 @@
             app:layout_constraintEnd_toEndOf="parent"
     />
 
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/market_price_btn_filter_30days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_30_days"
+            android:layout_marginTop="20dp"
+            style="@style/FilterButton"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintTop_toBottomOf="@+id/market_price_chart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/market_price_btn_filter_60days"
+    />
+
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/market_price_btn_filter_60days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_60_days"
+            style="@style/FilterButton"
+            app:layout_constraintTop_toTopOf="@+id/market_price_btn_filter_30days"
+            app:layout_constraintStart_toEndOf="@+id/market_price_btn_filter_30days"
+            app:layout_constraintEnd_toStartOf="@+id/market_price_btn_filter_180days"
+    />
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/market_price_btn_filter_180days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_180_days"
+            style="@style/FilterButton"
+
+            app:layout_constraintTop_toTopOf="@+id/market_price_btn_filter_60days"
+            app:layout_constraintStart_toEndOf="@+id/market_price_btn_filter_60days"
+            app:layout_constraintEnd_toEndOf="parent"
+    />
+
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/market_price_btn_filter_1year"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_1year"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintTop_toBottomOf="@+id/market_price_btn_filter_30days"
+            app:layout_constraintStart_toStartOf="@+id/market_price_btn_filter_30days"
+            app:layout_constraintEnd_toEndOf="@+id/market_price_btn_filter_30days"
+    />
+
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/market_price_btn_filter_2year"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_2year"
+            app:layout_constraintTop_toTopOf="@+id/market_price_btn_filter_1year"
+            app:layout_constraintStart_toStartOf="@+id/market_price_btn_filter_60days"
+            app:layout_constraintEnd_toEndOf="@+id/market_price_btn_filter_60days"
+    />
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/market_price_btn_filter_alltime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_all"
+            app:layout_constraintTop_toTopOf="@+id/market_price_btn_filter_1year"
+            app:layout_constraintStart_toStartOf="@+id/market_price_btn_filter_180days"
+            app:layout_constraintEnd_toEndOf="@+id/market_price_btn_filter_180days"
+    />
+    <!--string name="filter_180_days">180 Days</string>-->
+    <!--<string name="filter_1year">1 year</string>-->
+    <!--<string name="filter_2year">2 year</string>-->
+    <!--<string name="filter_all">All time</string>-->
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

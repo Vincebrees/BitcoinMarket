@@ -6,6 +6,7 @@ import com.github.vincebrees.bitcoinmarket.data.remote.BitcoinService
 import com.github.vincebrees.bitcoinmarket.data.remote.RemoteDataSource
 import com.github.vincebrees.bitcoinmarket.data.repository.BitcoinRepositoryImpl
 import com.github.vincebrees.bitcoinmarket.domain.interactors.GetMarketPriceUseCase
+import com.github.vincebrees.bitcoinmarket.domain.interactors.UpdateMarketPriceUseCase
 import com.github.vincebrees.bitcoinmarket.domain.repository.BitcoinRepository
 import com.github.vincebrees.bitcoinmarket.presentation.marketprice.MarketPriceViewModel
 import okhttp3.Cache
@@ -40,12 +41,13 @@ val appModule = module {
 
 val presentationModule = module {
     //all view model declared here
-    viewModel { MarketPriceViewModel(get()) }
+    viewModel { MarketPriceViewModel(get(), get()) }
 }
 
 val domainModule = module {
     //all domain interactors declared here, with factory scope
     factory { GetMarketPriceUseCase(get()) }
+    factory { UpdateMarketPriceUseCase(get()) }
 }
 
 

@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -16,8 +16,6 @@ import com.github.vincebrees.bitcoinmarket.R
 import com.github.vincebrees.bitcoinmarket.presentation.BaseFragment
 import kotlinx.android.synthetic.main.fragment_market_price.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
-import java.text.SimpleDateFormat
 
 
 /**
@@ -33,8 +31,18 @@ class MarketPriceFragment : BaseFragment(){
     }
 
     override fun initUI() {
-        super.initUI()
         initChart()
+        initButtonListeners()
+    }
+
+    private fun initButtonListeners() {
+        market_price_btn_filter_30days.setOnClickListener { marketPriceViewModel.onClickedFilter("30days") }
+        market_price_btn_filter_60days.setOnClickListener { marketPriceViewModel.onClickedFilter("60days") }
+        market_price_btn_filter_180days.setOnClickListener { marketPriceViewModel.onClickedFilter("180days") }
+        market_price_btn_filter_1year.setOnClickListener { marketPriceViewModel.onClickedFilter("1year") }
+        market_price_btn_filter_2year.setOnClickListener { marketPriceViewModel.onClickedFilter("2year") }
+        market_price_btn_filter_alltime.setOnClickListener { marketPriceViewModel.onClickedFilter("all") }
+
     }
 
     private fun initChart() {
@@ -46,7 +54,6 @@ class MarketPriceFragment : BaseFragment(){
 
             description.isEnabled = false
             setPinchZoom(false)
-            legend.isEnabled = false
 
             //Grid Lines
             xAxis.setDrawGridLines(false)
@@ -54,12 +61,9 @@ class MarketPriceFragment : BaseFragment(){
 
             //Axis X
             xAxis.position = XAxis.XAxisPosition.BOTTOM
-            xAxis.setDrawLabels(true)
+//            xAxis.setDrawLabels(true)
             xAxis.textColor = Color.BLACK
             xAxis.axisLineColor = Color.BLACK
-
-            //Axis Left
-            axisLeft.setDrawLabels(true)
 
             //Axis Right
             axisRight.isEnabled = false
@@ -70,7 +74,6 @@ class MarketPriceFragment : BaseFragment(){
     }
 
     override fun initObserver() {
-        super.initObserver()
         marketPriceViewModel.liveDataMarketPriceViewState.observe(this, Observer{
             if(it.isLoading){
                 showLoading()
@@ -100,14 +103,22 @@ class MarketPriceFragment : BaseFragment(){
             circleRadius = 3f
             valueTextSize = 9f
             setDrawCircles(false)
+            setDrawValues(false)
+            isHighlightEnabled = true
+            setDrawHighlightIndicators(false)
         }
 
         market_price_chart.apply {
             xAxis.valueFormatter = IAxisValueFormatter { value, axis ->
-                dates[value.toInt()]
+                if (value.toInt() > dates.size - 1) {
+                    ""
+                }else{
+                    dates[value.toInt()]
+                }
             }
             data = LineData(lineDataSet)
             notifyDataSetChanged()
+            invalidate()
         }
     }
 

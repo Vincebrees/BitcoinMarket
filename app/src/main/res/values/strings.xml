@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Bitcoin Market</string>
+
+    <string name="filter_60_days">60 Days</string>
+    <string name="filter_30_days">30 Days</string>
+    <string name="filter_180_days">180 Days</string>
+    <string name="filter_1year">1 year</string>
+    <string name="filter_2year">2 year</string>
+    <string name="filter_all">All time</string>
+
 </resources>

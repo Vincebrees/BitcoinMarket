@@ -6,6 +6,7 @@ import com.github.vincebrees.bitcoinmarket.domain.DataResponse
 import com.github.vincebrees.bitcoinmarket.domain.ErrorResponse
 import com.github.vincebrees.bitcoinmarket.domain.entity.BitcoinResponse
 import com.github.vincebrees.bitcoinmarket.domain.interactors.GetMarketPriceUseCase
+import com.github.vincebrees.bitcoinmarket.domain.interactors.UpdateMarketPriceUseCase
 import com.github.vincebrees.bitcoinmarket.presentation.BaseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -18,7 +19,8 @@ import java.util.*
  */
 
 class MarketPriceViewModel(
-    private val getMarketPriceUseCase: GetMarketPriceUseCase
+    private val getMarketPriceUseCase: GetMarketPriceUseCase,
+    private val updateMarketPriceUseCase: UpdateMarketPriceUseCase
 )  : BaseViewModel() {
 
     val liveDataCurveModel: MutableLiveData<CurveModel> = MutableLiveData()
@@ -55,5 +57,19 @@ class MarketPriceViewModel(
         liveDataCurveModel.value = CurveModel(listEntry, listDate)
 
         liveDataMarketPriceViewState.value?.copy(isLoading = false, isError = false)
+    }
+
+    fun onClickedFilter(timespan : String) {
+        val disposable = updateMarketPriceUseCase.invoke(timespan)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { response ->
+                when(response){
+                    is DataResponse -> handleResponseSuccess(response.data)
+                    is ErrorResponse -> liveDataMarketPriceViewState.value?.copy(isLoading = false, isError = true)
+                }
+            }
+
+        compositeDisposable.add(disposable)
     }
 }
