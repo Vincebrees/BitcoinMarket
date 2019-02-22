@@ -6,6 +6,7 @@ import com.github.vincebrees.bitcoinmarket.domain.TypeResponse
 import com.github.vincebrees.bitcoinmarket.domain.entity.BitcoinResponse
 import com.github.vincebrees.bitcoinmarket.domain.repository.BitcoinRepository
 import io.reactivex.Observable
+import okhttp3.CacheControl
 
 /**
  * Created by Vincent ETIENNE on 22/02/2019.
@@ -13,7 +14,7 @@ import io.reactivex.Observable
 
 class BitcoinRepositoryImpl(var remoteDataSource: RemoteDataSource) : BitcoinRepository {
 
-    override fun getMarketPrice(timespan: String?, rollingAverage: String?): Observable<TypeResponse<BitcoinResponse>> {
-        return remoteDataSource.getMarketPrice(timespan, rollingAverage)
+    override fun getMarketPrice(timespan: String?, rollingAverage: String?, cacheControl: CacheControl?): Observable<TypeResponse<BitcoinResponse>> {
+        return remoteDataSource.getMarketPrice(timespan, rollingAverage, cacheControl)
     }
 }

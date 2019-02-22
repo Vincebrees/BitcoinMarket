@@ -24,7 +24,7 @@ class MarketPriceViewModel(
     val liveDataCurveModel: MutableLiveData<CurveModel> = MutableLiveData()
     val liveDataMarketPriceViewState: MutableLiveData<MarketPriceViewState> = MutableLiveData()
 
-    private var dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+    private var dateFormat = SimpleDateFormat("MMM yy", Locale.getDefault())
 
 
     init {
