@@ -15,8 +15,8 @@ import okhttp3.CacheControl
 
 class RemoteDataSource(private var bitcoinService: BitcoinService){
 
-    fun getMarketPrice(timespan : String?, rollingAverage : String?, cacheControl : CacheControl?) : Observable<TypeResponse<BitcoinResponse>> {
-        return bitcoinService.getMarketPrice(timespan, rollingAverage, cacheControl.toString()).map {
+    fun getMarketPrice(timespan : String?, cacheControl : CacheControl?) : Observable<TypeResponse<BitcoinResponse>> {
+        return bitcoinService.getMarketPrice(timespan, cacheControl.toString()).map {
                 response -> if(response.isSuccessful && response.body() != null){
             DataResponse(response.body()!!.toEntity())
         }else{

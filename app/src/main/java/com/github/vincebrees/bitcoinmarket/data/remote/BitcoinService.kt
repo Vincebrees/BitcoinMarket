@@ -15,6 +15,5 @@ interface BitcoinService{
     @GET("/charts/market-price?format=json")
     fun getMarketPrice(
         @Query("timespan") timespan : String?,
-        @Query("rollingAverage") rollingAverage : String?,
         @Header("Cache-Control") cacheControl : String?) : Observable<Response<RestBitcoinResponse>>
 }

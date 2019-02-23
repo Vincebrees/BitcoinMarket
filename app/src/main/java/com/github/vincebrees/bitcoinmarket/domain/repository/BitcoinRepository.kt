@@ -10,5 +10,5 @@ import okhttp3.CacheControl
  */
 
 interface BitcoinRepository{
-    fun getMarketPrice(timespan: String?, rollingAverage: String?, cacheControl: CacheControl?): Observable<TypeResponse<BitcoinResponse>>
+    fun getMarketPrice(timespan: String?, cacheControl: CacheControl?): Observable<TypeResponse<BitcoinResponse>>
 }

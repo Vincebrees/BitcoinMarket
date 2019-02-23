@@ -13,7 +13,7 @@ import okhttp3.CacheControl
 
 class BitcoinRepositoryImpl(private var remoteDataSource: RemoteDataSource) : BitcoinRepository {
 
-    override fun getMarketPrice(timespan: String?, rollingAverage: String?, cacheControl: CacheControl?): Observable<TypeResponse<BitcoinResponse>> {
-        return remoteDataSource.getMarketPrice(timespan, rollingAverage, cacheControl)
+    override fun getMarketPrice(timespan: String?, cacheControl: CacheControl?): Observable<TypeResponse<BitcoinResponse>> {
+        return remoteDataSource.getMarketPrice(timespan, cacheControl)
     }
 }

@@ -13,7 +13,7 @@ data class RestBitcoinResponse(
     var unit : String,
     var period : String,
     var description : String,
-    var values : List<RestCoordonate>
+    var values : List<RestCoordonate>?
 )
 
 fun RestBitcoinResponse.toEntity() : BitcoinResponse{

@@ -11,6 +11,6 @@ import io.reactivex.Observable
 
 class UpdateMarketPriceUseCase(private val bitcoinRepository: BitcoinRepository){
     fun invoke(timeSpan: String): Observable<TypeResponse<BitcoinResponse>> {
-        return bitcoinRepository.getMarketPrice(timeSpan, null, null)
+        return bitcoinRepository.getMarketPrice(timeSpan, null)
     }
 }
