@@ -97,7 +97,7 @@ class MarketPriceFragment : BaseFragment(){
     private fun showChart(values : List<Entry>, dates : List<String>){
         val lineDataSet = LineDataSet(values, "MarketPriceSet")
         lineDataSet.apply {
-            color = ContextCompat.getColor(context!!, R.color.colorAccent)
+            color = ContextCompat.getColor(context!!, R.color.chartColor)
             setCircleColor(Color.BLACK)
             lineWidth = 1f
             circleRadius = 3f
