@@ -1,6 +1,5 @@
 package com.github.vincebrees.bitcoinmarket.data.remote
 
-import com.github.vincebrees.bitcoinmarket.data.remote.pojo.RestBitcoinResponse
 import com.github.vincebrees.bitcoinmarket.data.remote.pojo.toEntity
 import com.github.vincebrees.bitcoinmarket.domain.BitCoinError
 import com.github.vincebrees.bitcoinmarket.domain.DataResponse
@@ -14,7 +13,7 @@ import okhttp3.CacheControl
  * Created by Vincent ETIENNE on 22/02/2019.
  */
 
-class RemoteDataSource(var bitcoinService: BitcoinService){
+class RemoteDataSource(private var bitcoinService: BitcoinService){
 
     fun getMarketPrice(timespan : String?, rollingAverage : String?, cacheControl : CacheControl?) : Observable<TypeResponse<BitcoinResponse>> {
         return bitcoinService.getMarketPrice(timespan, rollingAverage, cacheControl.toString()).map {

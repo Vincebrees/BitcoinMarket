@@ -1,10 +1,7 @@
 package com.github.vincebrees.bitcoinmarket.presentation
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
-import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 
@@ -21,10 +18,9 @@ abstract class BaseFragment : Fragment() {
     }
 
     open fun initUI() {}
-    open fun initViewModel() {}
     open fun initObserver() {}
 
-    fun BaseFragment.showToast(message: String){
+    fun showToast(message: String){
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 }

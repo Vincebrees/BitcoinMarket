@@ -2,7 +2,6 @@ package com.github.vincebrees.bitcoinmarket.data.remote
 
 import com.github.vincebrees.bitcoinmarket.data.remote.pojo.RestBitcoinResponse
 import io.reactivex.Observable
-import okhttp3.CacheControl
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header

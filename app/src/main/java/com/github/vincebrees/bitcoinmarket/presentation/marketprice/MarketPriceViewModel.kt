@@ -2,6 +2,7 @@ package com.github.vincebrees.bitcoinmarket.presentation.marketprice
 
 import androidx.lifecycle.MutableLiveData
 import com.github.mikephil.charting.data.Entry
+import com.github.vincebrees.bitcoinmarket.common.Constants
 import com.github.vincebrees.bitcoinmarket.domain.DataResponse
 import com.github.vincebrees.bitcoinmarket.domain.ErrorResponse
 import com.github.vincebrees.bitcoinmarket.domain.entity.BitcoinResponse
@@ -10,7 +11,6 @@ import com.github.vincebrees.bitcoinmarket.domain.interactors.UpdateMarketPriceU
 import com.github.vincebrees.bitcoinmarket.presentation.BaseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,7 +26,7 @@ class MarketPriceViewModel(
     val liveDataCurveModel: MutableLiveData<CurveModel> = MutableLiveData()
     val liveDataMarketPriceViewState: MutableLiveData<MarketPriceViewState> = MutableLiveData()
 
-    private var dateFormat = SimpleDateFormat("MMM yy", Locale.getDefault())
+    private var dateFormat = SimpleDateFormat(Constants.CHART_DATE_PATTERN, Locale.getDefault())
 
 
     init {
