@@ -3,12 +3,12 @@ package com.github.vincebrees.bitcoinmarket.data.repository
 import com.github.vincebrees.bitcoinmarket.ConstantsTest
 import com.github.vincebrees.bitcoinmarket.RxImmediateSchedulerRule
 import com.github.vincebrees.bitcoinmarket.data.remote.RemoteDataSource
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -37,13 +37,13 @@ class BitcoinRepositoryImplTest {
     fun getMarketPriceWithTimeSpan(){
         classUnderTest.getMarketPrice(ConstantsTest.TIMESPAN_FILTER, null)
 
-        Mockito.verify(remoteDataSource).getMarketPrice(ConstantsTest.TIMESPAN_FILTER, null)
+        verify(remoteDataSource).getMarketPrice(ConstantsTest.TIMESPAN_FILTER, null)
     }
 
     @Test
     fun getMarketPriceWithoutTimeSpan(){
         classUnderTest.getMarketPrice(null, null)
 
-        Mockito.verify(remoteDataSource).getMarketPrice(null, null)
+        verify(remoteDataSource).getMarketPrice(null, null)
     }
 }

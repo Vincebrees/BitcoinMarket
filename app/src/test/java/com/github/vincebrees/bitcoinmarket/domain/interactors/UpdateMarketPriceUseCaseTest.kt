@@ -3,12 +3,13 @@ package com.github.vincebrees.bitcoinmarket.domain.interactors
 import com.github.vincebrees.bitcoinmarket.ConstantsTest
 import com.github.vincebrees.bitcoinmarket.RxImmediateSchedulerRule
 import com.github.vincebrees.bitcoinmarket.domain.repository.BitcoinRepository
+import com.nhaarman.mockitokotlin2.verify
+import okhttp3.CacheControl
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -35,9 +36,30 @@ class UpdateMarketPriceUseCaseTest {
     }
 
     @Test
-    fun testInvoke(){
+    fun testInvokeWithTimeSpan(){
         classUnderTest.invoke(ConstantsTest.TIMESPAN_FILTER)
 
-        Mockito.verify(bitcoinRepository).getMarketPrice(ConstantsTest.TIMESPAN_FILTER, null)
+        verify(bitcoinRepository).getMarketPrice(ConstantsTest.TIMESPAN_FILTER, null)
+    }
+
+    @Test
+    fun testInvokeWithoutTimeSpan(){
+        classUnderTest.invoke(null)
+
+        verify(bitcoinRepository).getMarketPrice(null, null)
+    }
+
+    @Test
+    fun testInvokeWithCacheControl(){
+        classUnderTest.invoke(null, CacheControl.FORCE_NETWORK)
+
+        verify(bitcoinRepository).getMarketPrice(null, CacheControl.FORCE_NETWORK)
+    }
+
+    @Test
+    fun testInvokeWithoutCacheControl(){
+        classUnderTest.invoke(null, null)
+
+        verify(bitcoinRepository).getMarketPrice(null, null)
     }
 }

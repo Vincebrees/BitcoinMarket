@@ -11,15 +11,15 @@ import com.github.vincebrees.bitcoinmarket.domain.entity.BitcoinResponse
 import com.github.vincebrees.bitcoinmarket.domain.interactors.GetMarketPriceUseCase
 import com.github.vincebrees.bitcoinmarket.domain.interactors.UpdateMarketPriceUseCase
 import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.Observable
+import okhttp3.CacheControl
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -88,7 +88,7 @@ class MarketPriceViewModelTest {
     fun onInitShowLoading(){
         initViewModelWithNoResponse()
 
-        Mockito.verify(getMarketPriceUseCase, times(1)).invoke()
+        verify(getMarketPriceUseCase, times(1)).invoke()
 
         val expectedFinalViewState = MarketPriceViewState(true, false, false)
 
@@ -99,7 +99,7 @@ class MarketPriceViewModelTest {
     fun onInitGetDataSuccess(){
         initViewModelWithDataResponse()
 
-        Mockito.verify(getMarketPriceUseCase, times(1)).invoke()
+        verify(getMarketPriceUseCase, times(1)).invoke()
 
         val expectedFinalViewState = MarketPriceViewState(false, false, false)
         val expectedCurveModel = CurveModel(arrayListOf(), arrayListOf())
@@ -112,7 +112,7 @@ class MarketPriceViewModelTest {
     fun onInitGetDataFailed(){
         initViewModelWithErrorResponse()
 
-        Mockito.verify(getMarketPriceUseCase, times(1)).invoke()
+        verify(getMarketPriceUseCase, times(1)).invoke()
 
         val expectedFinalViewState = MarketPriceViewState(false, true, false)
 
@@ -122,14 +122,13 @@ class MarketPriceViewModelTest {
     @Test
     fun onClickedFilterSuccess(){
         initViewModelWithNoResponse()
+        whenever(dataresponse.data).thenReturn(bitcoinResponse)
+        whenever(bitcoinResponse.values).thenReturn(arrayListOf())
 
-        Mockito.`when`(updateMarketPriceUseCase.invoke(ConstantsTest.TIMESPAN_FILTER)).thenReturn(
-            Observable.just(
-                DataResponse(BitcoinResponse("", "", "", "", "", arrayListOf())))
-        )
+        whenever(updateMarketPriceUseCase.invoke(ConstantsTest.TIMESPAN_FILTER)).thenReturn(Observable.just(dataresponse))
 
         classUnderTest.onClickedFilter(ConstantsTest.TIMESPAN_FILTER)
-        Mockito.verify(updateMarketPriceUseCase, times(1)).invoke(ConstantsTest.TIMESPAN_FILTER)
+        verify(updateMarketPriceUseCase, times(1)).invoke(ConstantsTest.TIMESPAN_FILTER)
 
         val expectedStartingViewState = MarketPriceViewState(true, false, false)
         val expectedFinalViewState = MarketPriceViewState(false, false, false)
@@ -144,16 +143,76 @@ class MarketPriceViewModelTest {
     fun onClickedFilterError(){
         initViewModelWithNoResponse()
 
-        Mockito.`when`(updateMarketPriceUseCase.invoke(ConstantsTest.TIMESPAN_FILTER)).thenReturn(
-            Observable.just(ErrorResponse()))
+        whenever(updateMarketPriceUseCase.invoke(ConstantsTest.TIMESPAN_FILTER)).thenReturn(
+            Observable.just(errorResponse))
 
         classUnderTest.onClickedFilter(ConstantsTest.TIMESPAN_FILTER)
-        Mockito.verify(updateMarketPriceUseCase, times(1)).invoke(ConstantsTest.TIMESPAN_FILTER)
+        verify(updateMarketPriceUseCase, times(1)).invoke(ConstantsTest.TIMESPAN_FILTER)
 
         val expectedStartingViewState = MarketPriceViewState(true, false, false)
         val expectedFinalViewState = MarketPriceViewState(false, false, true)
+        val expectedCurveModel = CurveModel(arrayListOf(), arrayListOf())
 
         verify(observerViewState, times(2)).onChanged(expectedStartingViewState)
         verify(observerViewState, times(1)).onChanged(expectedFinalViewState)
+        verify(observerCurveModel, times(0)).onChanged(expectedCurveModel)
+    }
+
+    @Test
+    fun onRefreshSuccess(){
+        initViewModelWithNoResponse()
+        whenever(dataresponse.data).thenReturn(bitcoinResponse)
+        whenever(bitcoinResponse.values).thenReturn(arrayListOf())
+
+        whenever(updateMarketPriceUseCase.invoke(ConstantsTest.DEFAULT_TIMESPAN, CacheControl.FORCE_NETWORK)).thenReturn(
+            Observable.just(dataresponse)
+        )
+
+        classUnderTest.onRefresh()
+
+        verify(updateMarketPriceUseCase, times(1)).invoke(ConstantsTest.DEFAULT_TIMESPAN, CacheControl.FORCE_NETWORK)
+
+        val expectedStartingViewState = MarketPriceViewState(true, false, false)
+        val expectedFinalViewState = MarketPriceViewState(false, false, false)
+        val expectedCurveModel = CurveModel(arrayListOf(), arrayListOf())
+
+        //expectedStartingViewState shouldnt be called twice, only once on the init of the viewModel
+        verify(observerViewState, times(1)).onChanged(expectedStartingViewState)
+        verify(observerViewState, times(1)).onChanged(expectedFinalViewState)
+        verify(observerCurveModel, times(1)).onChanged(expectedCurveModel)
+    }
+
+    @Test
+    fun onRefreshError(){
+        initViewModelWithNoResponse()
+
+        whenever(updateMarketPriceUseCase.invoke(ConstantsTest.DEFAULT_TIMESPAN, CacheControl.FORCE_NETWORK)).thenReturn(
+            Observable.just(errorResponse)
+        )
+
+        classUnderTest.onRefresh()
+
+        verify(updateMarketPriceUseCase, times(1)).invoke(ConstantsTest.DEFAULT_TIMESPAN, CacheControl.FORCE_NETWORK)
+
+        val expectedStartingViewState = MarketPriceViewState(true, false, false)
+        val expectedFinalViewState = MarketPriceViewState(false, false, true)
+        val expectedCurveModel = CurveModel(arrayListOf(), arrayListOf())
+
+        //expectedStartingViewState shouldnt be called twice, only once on the init of the viewModel
+        verify(observerViewState, times(1)).onChanged(expectedStartingViewState)
+        verify(observerViewState, times(1)).onChanged(expectedFinalViewState)
+        verify(observerCurveModel, times(0)).onChanged(expectedCurveModel)
+    }
+
+    @Test
+    fun verifyOnClickedFilterSaveTimespanForRefresh(){
+        //Run test filter before to init lastTimeSpan
+        onClickedFilterSuccess()
+
+        whenever(updateMarketPriceUseCase.invoke(ConstantsTest.TIMESPAN_FILTER, CacheControl.FORCE_NETWORK)).thenReturn(Observable.just(dataresponse))
+
+        classUnderTest.onRefresh()
+
+        verify(updateMarketPriceUseCase, times(1)).invoke(ConstantsTest.TIMESPAN_FILTER, CacheControl.FORCE_NETWORK)
     }
 }

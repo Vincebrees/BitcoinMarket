@@ -5,6 +5,7 @@ import com.github.vincebrees.bitcoinmarket.RxImmediateSchedulerRule
 import com.github.vincebrees.bitcoinmarket.data.remote.pojo.RestBitcoinResponse
 import com.github.vincebrees.bitcoinmarket.data.remote.pojo.toEntity
 import com.github.vincebrees.bitcoinmarket.domain.DataResponse
+import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.Observable
 import org.junit.Before
 import org.junit.Rule
@@ -43,13 +44,13 @@ class RemoteDataSourceTest {
 
         classUnderTest = RemoteDataSource(bitcoinService)
 
-        Mockito.`when`(bitcoinService.getMarketPrice(Mockito.anyString(), Mockito.any())).thenReturn(Observable.just(response))
-        Mockito.`when`(response.body()).thenReturn(mockData)
+        whenever(bitcoinService.getMarketPrice(Mockito.anyString(), Mockito.any())).thenReturn(Observable.just(response))
+        whenever(response.body()).thenReturn(mockData)
     }
 
     @Test
     fun getMarketPriceOnResponseSuccess(){
-        Mockito.`when`(response.isSuccessful).thenReturn(true)
+        whenever(response.isSuccessful).thenReturn(true)
 
         val result = classUnderTest.getMarketPrice(ConstantsTest.TIMESPAN_FILTER, null)
 
@@ -60,7 +61,7 @@ class RemoteDataSourceTest {
 
     @Test
     fun getMarketPriceOnResponseError(){
-        Mockito.`when`(response.isSuccessful).thenReturn(false)
+        whenever(response.isSuccessful).thenReturn(false)
 
         val result = classUnderTest.getMarketPrice(ConstantsTest.TIMESPAN_FILTER, null)
 

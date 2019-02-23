@@ -11,6 +11,7 @@ import com.github.vincebrees.bitcoinmarket.domain.interactors.UpdateMarketPriceU
 import com.github.vincebrees.bitcoinmarket.presentation.BaseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import okhttp3.CacheControl
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,7 +28,7 @@ class MarketPriceViewModel(
     val liveDataMarketPriceViewState: MutableLiveData<MarketPriceViewState> = MutableLiveData()
 
     private var dateFormat = SimpleDateFormat(Constants.CHART_DATE_PATTERN, Locale.getDefault())
-
+    private var lastTimeSpan : String = "1year"
 
     init {
         liveDataMarketPriceViewState.value = MarketPriceViewState(true, false, false)
@@ -65,7 +66,25 @@ class MarketPriceViewModel(
     fun onClickedFilter(timespan : String) {
         liveDataMarketPriceViewState.value = liveDataMarketPriceViewState.value?.copy(isLoading = true, isRefreshError = false)
 
+        lastTimeSpan = timespan
+
         val disposable = updateMarketPriceUseCase.invoke(timespan)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe ({ response ->
+                when(response){
+                    is DataResponse -> handleResponseSuccess(response.data)
+                    is ErrorResponse -> handleRefreshError()
+                }
+            }, {
+                handleRefreshError()
+            })
+
+        compositeDisposable.add(disposable)
+    }
+
+    fun onRefresh(){
+        val disposable = updateMarketPriceUseCase.invoke(lastTimeSpan, CacheControl.FORCE_NETWORK)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe ({ response ->

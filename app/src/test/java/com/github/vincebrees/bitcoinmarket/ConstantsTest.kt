@@ -6,4 +6,5 @@ package com.github.vincebrees.bitcoinmarket
 
 object ConstantsTest{
     const val TIMESPAN_FILTER = "60days"
+    const val DEFAULT_TIMESPAN = "1year"
 }

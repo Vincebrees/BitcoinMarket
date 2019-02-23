@@ -17,7 +17,7 @@ class RestBitcoinResponseTest{
         listRestCoordonate.add(RestCoordonate(1, 2.0))
 
         val pojo = RestBitcoinResponse("status", "name", "unit", "period", "description", listRestCoordonate)
-        var entity = pojo.toEntity()
+        val entity = pojo.toEntity()
 
         assertTrue(entity.status == pojo.status)
         assertTrue(entity.name == pojo.name)

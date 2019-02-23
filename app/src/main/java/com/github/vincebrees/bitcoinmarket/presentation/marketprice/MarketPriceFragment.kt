@@ -33,6 +33,14 @@ class MarketPriceFragment : BaseFragment(){
     override fun initUI() {
         initChart()
         initButtonListeners()
+        initSwipeRefresh()
+    }
+
+    private fun initSwipeRefresh() {
+        market_price_swipe_refresh.setColorSchemeColors(ContextCompat.getColor(context!!, R.color.colorAccent))
+        market_price_swipe_refresh.setOnRefreshListener {
+            marketPriceViewModel.onRefresh()
+        }
     }
 
     private fun initButtonListeners() {
@@ -120,6 +128,7 @@ class MarketPriceFragment : BaseFragment(){
     }
 
     private fun hideLoading() {
+        market_price_swipe_refresh.isRefreshing = false
         market_price_loader.hide()
     }
 
