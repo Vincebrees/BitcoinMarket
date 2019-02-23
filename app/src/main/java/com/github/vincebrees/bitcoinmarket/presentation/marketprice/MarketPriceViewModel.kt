@@ -3,7 +3,9 @@ package com.github.vincebrees.bitcoinmarket.presentation.marketprice
 import androidx.lifecycle.MutableLiveData
 import com.github.mikephil.charting.data.Entry
 import com.github.vincebrees.bitcoinmarket.common.Constants
+import com.github.vincebrees.bitcoinmarket.domain.BitCoinError
 import com.github.vincebrees.bitcoinmarket.domain.DataResponse
+import com.github.vincebrees.bitcoinmarket.domain.ErrorCode
 import com.github.vincebrees.bitcoinmarket.domain.ErrorResponse
 import com.github.vincebrees.bitcoinmarket.domain.entity.BitcoinResponse
 import com.github.vincebrees.bitcoinmarket.domain.interactors.GetMarketPriceUseCase
@@ -39,7 +41,7 @@ class MarketPriceViewModel(
             .subscribe ({ response ->
                 when(response){
                     is DataResponse -> handleResponseSuccess(response.data)
-                    is ErrorResponse -> handleGetDataError()
+                    is ErrorResponse -> handleGetDataError(response.errorType)
                 }
             }, {
                 handleGetDataError()
@@ -74,7 +76,7 @@ class MarketPriceViewModel(
             .subscribe ({ response ->
                 when(response){
                     is DataResponse -> handleResponseSuccess(response.data)
-                    is ErrorResponse -> handleRefreshError()
+                    is ErrorResponse -> handleRefreshError(response.errorType)
                 }
             }, {
                 handleRefreshError()
@@ -90,7 +92,7 @@ class MarketPriceViewModel(
             .subscribe ({ response ->
                 when(response){
                     is DataResponse -> handleResponseSuccess(response.data)
-                    is ErrorResponse -> handleRefreshError()
+                    is ErrorResponse -> handleRefreshError(response.errorType)
                 }
             }, {
                 handleRefreshError()
@@ -100,11 +102,17 @@ class MarketPriceViewModel(
     }
 
 
-    private fun handleGetDataError() {
-        liveDataMarketPriceViewState.value = liveDataMarketPriceViewState.value?.copy(isLoading = false, isError = true)
+    private fun handleGetDataError(errorType: ErrorCode? = BitCoinError.UNKNOWN) {
+        //Multiples type of error can be handled here
+        when(errorType as BitCoinError){
+            BitCoinError.UNKNOWN -> liveDataMarketPriceViewState.value = liveDataMarketPriceViewState.value?.copy(isLoading = false, isError = true)
+        }
     }
 
-    private fun handleRefreshError() {
-        liveDataMarketPriceViewState.value = liveDataMarketPriceViewState.value?.copy(isLoading = false, isRefreshError = true)
+    private fun handleRefreshError(errorType: ErrorCode? = BitCoinError.UNKNOWN) {
+        //Multiples type of error can be handled here
+        when(errorType as BitCoinError){
+            BitCoinError.UNKNOWN -> liveDataMarketPriceViewState.value = liveDataMarketPriceViewState.value?.copy(isLoading = false, isRefreshError = true)
+        }
     }
 }
