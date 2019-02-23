@@ -28,9 +28,5 @@ fun RestBitcoinResponse.toEntity() : BitcoinResponse{
 }
 
 fun List<RestCoordonate>?.toListCoordonate() : List<Coordonate>{
-    val listCoordonate = arrayListOf<Coordonate>()
-    this?.forEach {
-        listCoordonate.add(Coordonate(it.x, it.y))
-    }
-    return listCoordonate
+    return this?.map { Coordonate(it.x, it.y) } ?: arrayListOf()
 }
