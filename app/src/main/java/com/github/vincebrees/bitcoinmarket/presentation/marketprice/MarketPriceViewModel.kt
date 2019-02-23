@@ -38,7 +38,7 @@ class MarketPriceViewModel(
             .subscribe { response ->
                 when(response){
                     is DataResponse -> handleResponseSuccess(response.data)
-                    is ErrorResponse -> liveDataMarketPriceViewState.value?.copy(isLoading = false, isError = true)
+                    is ErrorResponse -> handleResponseError()
                 }
             }
 
@@ -56,7 +56,7 @@ class MarketPriceViewModel(
 
         liveDataCurveModel.value = CurveModel(listEntry, listDate)
 
-        liveDataMarketPriceViewState.value?.copy(isLoading = false, isError = false)
+        liveDataMarketPriceViewState.value = liveDataMarketPriceViewState.value?.copy(isLoading = false, isError = false)
     }
 
     fun onClickedFilter(timespan : String) {
@@ -66,10 +66,14 @@ class MarketPriceViewModel(
             .subscribe { response ->
                 when(response){
                     is DataResponse -> handleResponseSuccess(response.data)
-                    is ErrorResponse -> liveDataMarketPriceViewState.value?.copy(isLoading = false, isError = true)
+                    is ErrorResponse -> handleResponseError()
                 }
             }
 
         compositeDisposable.add(disposable)
+    }
+
+    private fun handleResponseError() {
+        liveDataMarketPriceViewState.value = liveDataMarketPriceViewState.value?.copy(isLoading = false, isError = true)
     }
 }
