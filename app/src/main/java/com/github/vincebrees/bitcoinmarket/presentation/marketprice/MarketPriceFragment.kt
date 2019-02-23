@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -88,7 +89,7 @@ class MarketPriceFragment : BaseFragment(){
     private fun showChart(values : List<Entry>, dates : List<String>){
         val lineDataSet = LineDataSet(values, "MarketPriceSet")
         lineDataSet.apply {
-            color = Color.BLACK
+            color = ContextCompat.getColor(context!!, R.color.colorAccent)
             setCircleColor(Color.BLACK)
             lineWidth = 1f
             circleRadius = 3f
