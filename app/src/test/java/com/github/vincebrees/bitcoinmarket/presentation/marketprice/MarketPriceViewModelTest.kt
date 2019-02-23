@@ -45,26 +45,84 @@ class MarketPriceViewModelTest {
     lateinit var observerViewState: Observer<MarketPriceViewState>
     @Mock
     lateinit var response : TypeResponse<BitcoinResponse>
+    @Mock
+    lateinit var dataresponse : DataResponse<BitcoinResponse>
+    @Mock
+    lateinit var bitcoinResponse: BitcoinResponse
+    @Mock
+    lateinit var errorResponse : ErrorResponse<BitcoinResponse>
 
     private lateinit var classUnderTest : MarketPriceViewModel
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
+    }
+    private fun initViewModelWithNoResponse() {
+        whenever(getMarketPriceUseCase.invoke()).thenReturn(Observable.just(response))
+        initViewModel()
+    }
 
-        whenever(getMarketPriceUseCase.invoke()).thenReturn(
-            Observable.just(response)
-        )
+    private fun initViewModelWithDataResponse() {
+        whenever(getMarketPriceUseCase.invoke()).thenReturn(Observable.just(dataresponse))
+        whenever(dataresponse.data).thenReturn(bitcoinResponse)
+        whenever(bitcoinResponse.values).thenReturn(arrayListOf())
 
+        initViewModel()
+    }
+
+    private fun initViewModelWithErrorResponse() {
+        whenever(getMarketPriceUseCase.invoke()).thenReturn(Observable.just(errorResponse))
+        initViewModel()
+    }
+
+    private fun initViewModel() {
         classUnderTest = MarketPriceViewModel(getMarketPriceUseCase, updateMarketPriceUseCase)
 
         classUnderTest.liveDataCurveModel.observeForever(observerCurveModel)
         classUnderTest.liveDataMarketPriceViewState.observeForever(observerViewState)
+    }
 
+
+    @Test
+    fun onInitShowLoading(){
+        initViewModelWithNoResponse()
+
+        Mockito.verify(getMarketPriceUseCase, times(1)).invoke()
+
+        val expectedFinalViewState = MarketPriceViewState(true, false, false)
+
+        verify(observerViewState, times(1)).onChanged(expectedFinalViewState)
+    }
+
+    @Test
+    fun onInitGetDataSuccess(){
+        initViewModelWithDataResponse()
+
+        Mockito.verify(getMarketPriceUseCase, times(1)).invoke()
+
+        val expectedFinalViewState = MarketPriceViewState(false, false, false)
+        val expectedCurveModel = CurveModel(arrayListOf(), arrayListOf())
+
+        verify(observerViewState, times(1)).onChanged(expectedFinalViewState)
+        verify(observerCurveModel, times(1)).onChanged(expectedCurveModel)
+    }
+
+    @Test
+    fun onInitGetDataFailed(){
+        initViewModelWithErrorResponse()
+
+        Mockito.verify(getMarketPriceUseCase, times(1)).invoke()
+
+        val expectedFinalViewState = MarketPriceViewState(false, true, false)
+
+        verify(observerViewState, times(1)).onChanged(expectedFinalViewState)
     }
 
     @Test
     fun onClickedFilterSuccess(){
+        initViewModelWithNoResponse()
+
         Mockito.`when`(updateMarketPriceUseCase.invoke(ConstantsTest.TIMESPAN_FILTER)).thenReturn(
             Observable.just(
                 DataResponse(BitcoinResponse("", "", "", "", "", arrayListOf())))
@@ -84,6 +142,8 @@ class MarketPriceViewModelTest {
 
     @Test
     fun onClickedFilterError(){
+        initViewModelWithNoResponse()
+
         Mockito.`when`(updateMarketPriceUseCase.invoke(ConstantsTest.TIMESPAN_FILTER)).thenReturn(
             Observable.just(ErrorResponse()))
 
