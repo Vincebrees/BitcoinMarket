@@ -33,7 +33,7 @@ class RemoteDataSourceTest {
     @Mock
     lateinit var response : Response<RestBitcoinResponse>
 
-    var mockData = RestBitcoinResponse("", "", "", "", "", arrayListOf())
+    private val mockData = RestBitcoinResponse("", "", "", "", "", arrayListOf())
 
 
     private lateinit var classUnderTest : RemoteDataSource
