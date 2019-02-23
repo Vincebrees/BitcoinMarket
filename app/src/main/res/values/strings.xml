@@ -8,4 +8,5 @@
     <string name="filter_2year">2 year</string>
     <string name="filter_all">All time</string>
 
+    <string name="generic_error">Oops! Something went wrong!</string>
 </resources>

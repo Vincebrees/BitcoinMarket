@@ -72,7 +72,7 @@ class MarketPriceViewModelTest {
         viewModel.onClickedFilter(TIMESPAN_FILTER)
         Mockito.verify(updateMarketPriceUseCase, times(1)).invoke(TIMESPAN_FILTER)
 
-        val expectedFinalViewState = MarketPriceViewState(false, false)
+        val expectedFinalViewState = MarketPriceViewState(false, false, false)
         val expectedCurveModel = CurveModel(arrayListOf(), arrayListOf())
 
         verify(observerViewState, times(2)).onChanged(expectedFinalViewState)
@@ -87,7 +87,7 @@ class MarketPriceViewModelTest {
         viewModel.onClickedFilter(TIMESPAN_FILTER)
         Mockito.verify(updateMarketPriceUseCase, times(1)).invoke(TIMESPAN_FILTER)
 
-        val expectedFinalViewState = MarketPriceViewState(false, true)
+        val expectedFinalViewState = MarketPriceViewState(false, false, true)
         verify(observerViewState, times(1)).onChanged(expectedFinalViewState)
     }
 

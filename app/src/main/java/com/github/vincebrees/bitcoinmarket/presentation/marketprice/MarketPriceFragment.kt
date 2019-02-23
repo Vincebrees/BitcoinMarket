@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -61,7 +60,6 @@ class MarketPriceFragment : BaseFragment(){
 
             //Axis X
             xAxis.position = XAxis.XAxisPosition.BOTTOM
-//            xAxis.setDrawLabels(true)
             xAxis.textColor = Color.BLACK
             xAxis.axisLineColor = Color.BLACK
 
@@ -69,23 +67,16 @@ class MarketPriceFragment : BaseFragment(){
             axisRight.isEnabled = false
 
             isHighlightPerTapEnabled = true
+            visibility = View.INVISIBLE
         }
 
     }
 
     override fun initObserver() {
         marketPriceViewModel.liveDataMarketPriceViewState.observe(this, Observer{
-            if(it.isLoading){
-                showLoading()
-            }else{
-                hideLoading()
-            }
-
-            if(it.isError){
-                showError()
-            }else{
-                hideError()
-            }
+            if(it.isLoading) showLoading() else hideLoading()
+            if(it.isError) showError() else hideError()
+            if(it.isRefreshError) showToast(getString(R.string.generic_error))
         })
 
         marketPriceViewModel.liveDataCurveModel.observe(this, Observer {
@@ -109,6 +100,7 @@ class MarketPriceFragment : BaseFragment(){
         }
 
         market_price_chart.apply {
+            visibility = View.VISIBLE
             xAxis.valueFormatter = IAxisValueFormatter { value, axis ->
                 if (value.toInt() > dates.size - 1) {
                     ""
@@ -123,18 +115,18 @@ class MarketPriceFragment : BaseFragment(){
     }
 
     private fun showLoading() {
-        //TODO("not implemented")
+        market_price_loader.show()
     }
 
     private fun hideLoading() {
-        //TODO("not implemented")
+        market_price_loader.hide()
     }
 
     private fun showError() {
-        //TODO("not implemented")
+        market_price_view_error.visibility = View.VISIBLE
     }
 
     private fun hideError() {
-        //TODO("not implemented")
+        market_price_view_error.visibility = View.INVISIBLE
     }
 }

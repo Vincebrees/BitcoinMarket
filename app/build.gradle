@@ -47,6 +47,7 @@ android {
         def vector_version = '1.0.1'
         def constraint_version = '2.0.0-alpha3'
 
+        def lottie_version = '2.8.0'
 
         implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
         //============Compat Lib=================
@@ -77,8 +78,9 @@ android {
         implementation 'com.squareup.okhttp3:okhttp:' + okhttp_version
         implementation 'com.squareup.okhttp3:logging-interceptor:' + okhttp_version
 
-        //============Chart Library=================
+        //============Design Library=================
         implementation 'com.github.PhilJay:MPAndroidChart:' + chart_version
+        implementation 'com.airbnb.android:lottie:' + lottie_version
 
         //============Support Libraries=================
         implementation 'androidx.appcompat:appcompat:' + androidx_compat_version

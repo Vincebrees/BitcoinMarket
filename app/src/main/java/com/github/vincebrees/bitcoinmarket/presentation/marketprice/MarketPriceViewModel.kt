@@ -30,17 +30,20 @@ class MarketPriceViewModel(
 
 
     init {
-        liveDataMarketPriceViewState.value = MarketPriceViewState(true, false)
+        liveDataMarketPriceViewState.value = MarketPriceViewState(true, false, false)
 
         val disposable = getMarketPriceUseCase.invoke()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { response ->
+            .subscribe ({ response ->
                 when(response){
                     is DataResponse -> handleResponseSuccess(response.data)
-                    is ErrorResponse -> handleResponseError()
+                    is ErrorResponse -> handleGetDataError()
                 }
-            }
+            }, {
+                handleGetDataError()
+            })
+
 
         compositeDisposable.add(disposable)
     }
@@ -56,24 +59,33 @@ class MarketPriceViewModel(
 
         liveDataCurveModel.value = CurveModel(listEntry, listDate)
 
-        liveDataMarketPriceViewState.value = liveDataMarketPriceViewState.value?.copy(isLoading = false, isError = false)
+        liveDataMarketPriceViewState.value = liveDataMarketPriceViewState.value?.copy(isLoading = false, isError = false, isRefreshError = false)
     }
 
     fun onClickedFilter(timespan : String) {
+        liveDataMarketPriceViewState.value = liveDataMarketPriceViewState.value?.copy(isLoading = true, isRefreshError = false)
+
         val disposable = updateMarketPriceUseCase.invoke(timespan)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { response ->
+            .subscribe ({ response ->
                 when(response){
                     is DataResponse -> handleResponseSuccess(response.data)
-                    is ErrorResponse -> handleResponseError()
+                    is ErrorResponse -> handleRefreshError()
                 }
-            }
+            }, {
+                handleRefreshError()
+            })
 
         compositeDisposable.add(disposable)
     }
 
-    private fun handleResponseError() {
+
+    private fun handleGetDataError() {
         liveDataMarketPriceViewState.value = liveDataMarketPriceViewState.value?.copy(isLoading = false, isError = true)
+    }
+
+    private fun handleRefreshError() {
+        liveDataMarketPriceViewState.value = liveDataMarketPriceViewState.value?.copy(isLoading = false, isRefreshError = true)
     }
 }

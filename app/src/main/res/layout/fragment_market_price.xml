@@ -79,10 +79,29 @@
             app:layout_constraintStart_toStartOf="@+id/market_price_btn_filter_180days"
             app:layout_constraintEnd_toEndOf="@+id/market_price_btn_filter_180days"
     />
-    <!--string name="filter_180_days">180 Days</string>-->
-    <!--<string name="filter_1year">1 year</string>-->
-    <!--<string name="filter_2year">2 year</string>-->
-    <!--<string name="filter_all">All time</string>-->
+
+    <TextView
+            android:id="@+id/market_price_view_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/generic_error"
+            android:textColor="@color/colorAccent"
+            style="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintTop_toTopOf="@+id/market_price_chart"
+            app:layout_constraintStart_toStartOf="@+id/market_price_chart"
+            app:layout_constraintEnd_toEndOf="@+id/market_price_chart"
+            app:layout_constraintBottom_toBottomOf="@+id/market_price_chart"/>
+
+
+    <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/market_price_loader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleLarge"
+            app:layout_constraintTop_toTopOf="@+id/market_price_chart"
+            app:layout_constraintStart_toStartOf="@+id/market_price_chart"
+            app:layout_constraintEnd_toEndOf="@+id/market_price_chart"
+            app:layout_constraintBottom_toBottomOf="@+id/market_price_chart"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
