@@ -60,7 +60,7 @@ class MarketPriceViewModel(
             listDate.add(dateFormat.format(Date(it.x * 1000L)))
         }
 
-        liveDataCurveModel.value = CurveModel(listEntry, listDate)
+        liveDataCurveModel.value = CurveModel(bitcoinResponse.title, bitcoinResponse.description, listEntry, listDate)
 
         liveDataMarketPriceViewState.value = liveDataMarketPriceViewState.value?.copy(isLoading = false, isError = false, isRefreshError = false)
     }

@@ -6,7 +6,7 @@ package com.github.vincebrees.bitcoinmarket.domain.entity
 
 data class BitcoinResponse(
     var status : String,
-    var name : String,
+    var title : String,
     var unit : String,
     var period : String,
     var description : String,

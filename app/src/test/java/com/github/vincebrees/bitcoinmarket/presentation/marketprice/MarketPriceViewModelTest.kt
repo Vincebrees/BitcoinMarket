@@ -65,15 +65,20 @@ class MarketPriceViewModelTest {
 
     private fun initViewModelWithDataResponse() {
         whenever(getMarketPriceUseCase.invoke()).thenReturn(Observable.just(dataresponse))
-        whenever(dataresponse.data).thenReturn(bitcoinResponse)
-        whenever(bitcoinResponse.values).thenReturn(arrayListOf())
-
+        initMockBitcoinResponseWithData()
         initViewModel()
     }
 
     private fun initViewModelWithErrorResponse() {
         whenever(getMarketPriceUseCase.invoke()).thenReturn(Observable.just(errorResponse))
         initViewModel()
+    }
+
+    private fun initMockBitcoinResponseWithData(){
+        whenever(dataresponse.data).thenReturn(bitcoinResponse)
+        whenever(bitcoinResponse.values).thenReturn(arrayListOf())
+        whenever(bitcoinResponse.title).thenReturn(ConstantsTest.BITCOIN_RESPONSE_TITLE)
+        whenever(bitcoinResponse.description).thenReturn(ConstantsTest.BITCOIN_RESPONSE_DESCRIPTION)
     }
 
     private fun initViewModel() {
@@ -102,7 +107,7 @@ class MarketPriceViewModelTest {
         verify(getMarketPriceUseCase, times(1)).invoke()
 
         val expectedFinalViewState = MarketPriceViewState(false, false, false)
-        val expectedCurveModel = CurveModel(arrayListOf(), arrayListOf())
+        val expectedCurveModel = CurveModel(ConstantsTest.BITCOIN_RESPONSE_TITLE, ConstantsTest.BITCOIN_RESPONSE_DESCRIPTION, arrayListOf(), arrayListOf())
 
         verify(observerViewState, times(1)).onChanged(expectedFinalViewState)
         verify(observerCurveModel, times(1)).onChanged(expectedCurveModel)
@@ -122,8 +127,7 @@ class MarketPriceViewModelTest {
     @Test
     fun onClickedFilterSuccess(){
         initViewModelWithNoResponse()
-        whenever(dataresponse.data).thenReturn(bitcoinResponse)
-        whenever(bitcoinResponse.values).thenReturn(arrayListOf())
+        initMockBitcoinResponseWithData()
 
         whenever(updateMarketPriceUseCase.invoke(ConstantsTest.TIMESPAN_FILTER)).thenReturn(Observable.just(dataresponse))
 
@@ -132,7 +136,7 @@ class MarketPriceViewModelTest {
 
         val expectedStartingViewState = MarketPriceViewState(true, false, false)
         val expectedFinalViewState = MarketPriceViewState(false, false, false)
-        val expectedCurveModel = CurveModel(arrayListOf(), arrayListOf())
+        val expectedCurveModel = CurveModel(ConstantsTest.BITCOIN_RESPONSE_TITLE, ConstantsTest.BITCOIN_RESPONSE_DESCRIPTION, arrayListOf(), arrayListOf())
 
         verify(observerViewState, times(2)).onChanged(expectedStartingViewState)
         verify(observerViewState, times(1)).onChanged(expectedFinalViewState)
@@ -151,7 +155,7 @@ class MarketPriceViewModelTest {
 
         val expectedStartingViewState = MarketPriceViewState(true, false, false)
         val expectedFinalViewState = MarketPriceViewState(false, false, true)
-        val expectedCurveModel = CurveModel(arrayListOf(), arrayListOf())
+        val expectedCurveModel = CurveModel(ConstantsTest.BITCOIN_RESPONSE_TITLE, ConstantsTest.BITCOIN_RESPONSE_DESCRIPTION, arrayListOf(), arrayListOf())
 
         verify(observerViewState, times(2)).onChanged(expectedStartingViewState)
         verify(observerViewState, times(1)).onChanged(expectedFinalViewState)
@@ -161,8 +165,7 @@ class MarketPriceViewModelTest {
     @Test
     fun onRefreshSuccess(){
         initViewModelWithNoResponse()
-        whenever(dataresponse.data).thenReturn(bitcoinResponse)
-        whenever(bitcoinResponse.values).thenReturn(arrayListOf())
+        initMockBitcoinResponseWithData()
 
         whenever(updateMarketPriceUseCase.invoke(ConstantsTest.DEFAULT_TIMESPAN, CacheControl.FORCE_NETWORK)).thenReturn(
             Observable.just(dataresponse)
@@ -174,7 +177,7 @@ class MarketPriceViewModelTest {
 
         val expectedStartingViewState = MarketPriceViewState(true, false, false)
         val expectedFinalViewState = MarketPriceViewState(false, false, false)
-        val expectedCurveModel = CurveModel(arrayListOf(), arrayListOf())
+        val expectedCurveModel = CurveModel(ConstantsTest.BITCOIN_RESPONSE_TITLE, ConstantsTest.BITCOIN_RESPONSE_DESCRIPTION, arrayListOf(), arrayListOf())
 
         //expectedStartingViewState shouldnt be called twice, only once on the init of the viewModel
         verify(observerViewState, times(1)).onChanged(expectedStartingViewState)
@@ -196,7 +199,7 @@ class MarketPriceViewModelTest {
 
         val expectedStartingViewState = MarketPriceViewState(true, false, false)
         val expectedFinalViewState = MarketPriceViewState(false, false, true)
-        val expectedCurveModel = CurveModel(arrayListOf(), arrayListOf())
+        val expectedCurveModel = CurveModel("", "", arrayListOf(), arrayListOf())
 
         //expectedStartingViewState shouldnt be called twice, only once on the init of the viewModel
         verify(observerViewState, times(1)).onChanged(expectedStartingViewState)

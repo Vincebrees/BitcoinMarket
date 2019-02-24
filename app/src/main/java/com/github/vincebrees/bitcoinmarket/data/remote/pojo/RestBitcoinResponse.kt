@@ -8,21 +8,21 @@ import com.github.vincebrees.bitcoinmarket.domain.entity.Coordonate
  */
 
 data class RestBitcoinResponse(
-    var status : String,
-    var name : String,
-    var unit : String,
-    var period : String,
-    var description : String,
+    var status : String?,
+    var name : String?,
+    var unit : String?,
+    var period : String?,
+    var description : String?,
     var values : List<RestCoordonate>?
 )
 
 fun RestBitcoinResponse.toEntity() : BitcoinResponse{
     return BitcoinResponse(
-        status,
-        name,
-        unit,
-        period,
-        description,
+        status ?: "",
+        name ?: "",
+        unit ?: "",
+        period ?: "",
+        description ?: "",
         values.toListCoordonate()
     )
 }

@@ -20,7 +20,7 @@ class RestBitcoinResponseTest{
         val entity = pojo.toEntity()
 
         assertTrue(entity.status == pojo.status)
-        assertTrue(entity.name == pojo.name)
+        assertTrue(entity.title == pojo.name)
         assertTrue(entity.unit == pojo.unit)
         assertTrue(entity.period == pojo.period)
         assertTrue(entity.description == pojo.description)
@@ -41,11 +41,15 @@ class RestBitcoinResponseTest{
     }
 
     @Test
-    fun mappingToEntityWithNullList(){
+    fun mappingToEntityWithNullValues(){
 
-        val pojo = RestBitcoinResponse("status", "name", "unit", "period", "description", null)
+        val pojo = RestBitcoinResponse(null, null, null, null, null, null)
         val entity = pojo.toEntity()
-
+        assertTrue(entity.status == "")
+        assertTrue(entity.title == "")
+        assertTrue(entity.unit == "")
+        assertTrue(entity.period == "")
+        assertTrue(entity.description == "")
         assertTrue(entity.values.isEmpty())
     }
 }

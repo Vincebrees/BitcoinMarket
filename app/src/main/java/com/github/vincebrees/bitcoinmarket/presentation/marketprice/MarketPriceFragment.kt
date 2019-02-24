@@ -89,6 +89,8 @@ class MarketPriceFragment : BaseFragment(){
         })
 
         marketPriceViewModel.liveDataCurveModel.observe(this, Observer {
+            market_price_txt_title.text = it.title
+            market_price_txt_description.text = it.description
             showChart(it.listValues, it.listFormattedDate)
         })
     }
