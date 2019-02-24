@@ -56,8 +56,8 @@ fun createOkHttpClient(cache : Cache): OkHttpClient {
     httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
     return OkHttpClient.Builder()
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .readTimeout(10, TimeUnit.SECONDS)
         .cache(cache)
         .addInterceptor(httpLoggingInterceptor)
         .build()
