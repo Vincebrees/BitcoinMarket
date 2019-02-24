@@ -1,7 +1,6 @@
 .gradle
 /local.properties
 .DS_Store
-*.apk
 *.dex
 *.class
 /build
