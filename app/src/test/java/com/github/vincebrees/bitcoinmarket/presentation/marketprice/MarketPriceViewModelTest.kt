@@ -95,7 +95,7 @@ class MarketPriceViewModelTest {
 
         verify(getMarketPriceUseCase, times(1)).invoke()
 
-        val expectedFinalViewState = MarketPriceViewState(true, false, false)
+        val expectedFinalViewState = MarketPriceViewState(isLoading = true, isError = false, isRefreshError = false)
 
         verify(observerViewState, times(1)).onChanged(expectedFinalViewState)
     }
@@ -106,7 +106,7 @@ class MarketPriceViewModelTest {
 
         verify(getMarketPriceUseCase, times(1)).invoke()
 
-        val expectedFinalViewState = MarketPriceViewState(false, false, false)
+        val expectedFinalViewState = MarketPriceViewState(isLoading = false, isError = false, isRefreshError = false)
         val expectedCurveModel = CurveModel(ConstantsTest.BITCOIN_RESPONSE_TITLE, ConstantsTest.BITCOIN_RESPONSE_DESCRIPTION, arrayListOf(), arrayListOf())
 
         verify(observerViewState, times(1)).onChanged(expectedFinalViewState)
@@ -119,7 +119,7 @@ class MarketPriceViewModelTest {
 
         verify(getMarketPriceUseCase, times(1)).invoke()
 
-        val expectedFinalViewState = MarketPriceViewState(false, true, false)
+        val expectedFinalViewState = MarketPriceViewState(isLoading = false, isError = true, isRefreshError = false)
 
         verify(observerViewState, times(1)).onChanged(expectedFinalViewState)
     }
@@ -134,8 +134,8 @@ class MarketPriceViewModelTest {
         classUnderTest.onClickedFilter(ConstantsTest.TIMESPAN_FILTER)
         verify(updateMarketPriceUseCase, times(1)).invoke(ConstantsTest.TIMESPAN_FILTER)
 
-        val expectedStartingViewState = MarketPriceViewState(true, false, false)
-        val expectedFinalViewState = MarketPriceViewState(false, false, false)
+        val expectedStartingViewState = MarketPriceViewState(isLoading = true, isError = false, isRefreshError = false)
+        val expectedFinalViewState = MarketPriceViewState(isLoading = false, isError = false, isRefreshError = false)
         val expectedCurveModel = CurveModel(ConstantsTest.BITCOIN_RESPONSE_TITLE, ConstantsTest.BITCOIN_RESPONSE_DESCRIPTION, arrayListOf(), arrayListOf())
 
         verify(observerViewState, times(2)).onChanged(expectedStartingViewState)
@@ -153,8 +153,8 @@ class MarketPriceViewModelTest {
         classUnderTest.onClickedFilter(ConstantsTest.TIMESPAN_FILTER)
         verify(updateMarketPriceUseCase, times(1)).invoke(ConstantsTest.TIMESPAN_FILTER)
 
-        val expectedStartingViewState = MarketPriceViewState(true, false, false)
-        val expectedFinalViewState = MarketPriceViewState(false, false, true)
+        val expectedStartingViewState = MarketPriceViewState(isLoading = true, isError = false, isRefreshError = false)
+        val expectedFinalViewState = MarketPriceViewState(isLoading = false, isError = false, isRefreshError = true)
         val expectedCurveModel = CurveModel(ConstantsTest.BITCOIN_RESPONSE_TITLE, ConstantsTest.BITCOIN_RESPONSE_DESCRIPTION, arrayListOf(), arrayListOf())
 
         verify(observerViewState, times(2)).onChanged(expectedStartingViewState)
@@ -175,8 +175,8 @@ class MarketPriceViewModelTest {
 
         verify(updateMarketPriceUseCase, times(1)).invoke(ConstantsTest.DEFAULT_TIMESPAN, CacheControl.FORCE_NETWORK)
 
-        val expectedStartingViewState = MarketPriceViewState(true, false, false)
-        val expectedFinalViewState = MarketPriceViewState(false, false, false)
+        val expectedStartingViewState = MarketPriceViewState(isLoading = true, isError = false, isRefreshError = false)
+        val expectedFinalViewState = MarketPriceViewState(isLoading = false, isError = false, isRefreshError = false)
         val expectedCurveModel = CurveModel(ConstantsTest.BITCOIN_RESPONSE_TITLE, ConstantsTest.BITCOIN_RESPONSE_DESCRIPTION, arrayListOf(), arrayListOf())
 
         //expectedStartingViewState shouldnt be called twice, only once on the init of the viewModel
@@ -197,8 +197,8 @@ class MarketPriceViewModelTest {
 
         verify(updateMarketPriceUseCase, times(1)).invoke(ConstantsTest.DEFAULT_TIMESPAN, CacheControl.FORCE_NETWORK)
 
-        val expectedStartingViewState = MarketPriceViewState(true, false, false)
-        val expectedFinalViewState = MarketPriceViewState(false, false, true)
+        val expectedStartingViewState = MarketPriceViewState(isLoading = true, isError = false, isRefreshError = false)
+        val expectedFinalViewState = MarketPriceViewState(isLoading = false, isError = false, isRefreshError = true)
         val expectedCurveModel = CurveModel("", "", arrayListOf(), arrayListOf())
 
         //expectedStartingViewState shouldnt be called twice, only once on the init of the viewModel

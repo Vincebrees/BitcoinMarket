@@ -22,7 +22,7 @@ import java.util.*
  */
 
 class MarketPriceViewModel(
-    private val getMarketPriceUseCase: GetMarketPriceUseCase,
+    getMarketPriceUseCase: GetMarketPriceUseCase,
     private val updateMarketPriceUseCase: UpdateMarketPriceUseCase
 )  : BaseViewModel() {
 
@@ -33,7 +33,7 @@ class MarketPriceViewModel(
     private var lastTimeSpan : String = "1year"
 
     init {
-        liveDataMarketPriceViewState.value = MarketPriceViewState(true, false, false)
+        liveDataMarketPriceViewState.value = MarketPriceViewState(isLoading = true, isError = false, isRefreshError =  false)
 
         val disposable = getMarketPriceUseCase.invoke()
             .subscribeOn(Schedulers.io())

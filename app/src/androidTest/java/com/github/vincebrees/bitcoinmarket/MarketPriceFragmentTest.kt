@@ -1,11 +1,10 @@
-package com.github.vincebrees.bitcoinmarket.presentation.marketprice
+package com.github.vincebrees.bitcoinmarket
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
-import com.github.vincebrees.bitcoinmarket.R
 import com.github.vincebrees.bitcoinmarket.presentation.home.HomeActivity
 import org.junit.Rule
 import org.junit.Test
