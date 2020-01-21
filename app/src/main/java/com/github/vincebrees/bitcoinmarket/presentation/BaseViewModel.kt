@@ -1,20 +1,28 @@
 package com.github.vincebrees.bitcoinmarket.presentation
 
 import androidx.lifecycle.ViewModel
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
-/**
- * Created by Vincent ETIENNE on 22/02/2019.
- */
+abstract class BaseViewModel(
+    private val dispatcher: CoroutineDispatcher
+) : ViewModel(), CoroutineScope {
 
-abstract class BaseViewModel : ViewModel(){
-
-    val compositeDisposable = CompositeDisposable()
+    private var handler : CoroutineExceptionHandler = CoroutineExceptionHandler { _, throwable -> baseHandleException(throwable) }
+    private var job: Job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = dispatcher + job + handler
 
 
     override fun onCleared() {
         super.onCleared()
-        compositeDisposable.clear()
+        job.cancelChildren() // Cancel job on activity destroy. After destroy all children jobs will be cancelled automatically
     }
 
+    private fun baseHandleException(throwable: Throwable) {
+        handleException()
+    }
+
+    // Must be overridden by all ViewModels
+    abstract fun handleException()
 }
