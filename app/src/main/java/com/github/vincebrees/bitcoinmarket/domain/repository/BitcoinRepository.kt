@@ -1,14 +1,8 @@
 package com.github.vincebrees.bitcoinmarket.domain.repository
 
-import com.github.vincebrees.bitcoinmarket.domain.TypeResponse
 import com.github.vincebrees.bitcoinmarket.domain.entity.BitcoinResponse
-import io.reactivex.Observable
 import okhttp3.CacheControl
 
-/**
- * Created by Vincent ETIENNE on 22/02/2019.
- */
-
 interface BitcoinRepository{
-    fun getMarketPrice(timespan: String?, cacheControl: CacheControl?): Observable<TypeResponse<BitcoinResponse>>
+    suspend fun getChartData(urlData: String, timespan: String?, cacheControl: CacheControl?): BitcoinResponse
 }

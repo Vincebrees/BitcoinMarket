@@ -1,4 +1,4 @@
-package com.github.vincebrees.bitcoinmarket.presentation.marketprice
+package com.github.vincebrees.bitcoinmarket.presentation.chartfragment
 
 import android.graphics.Color
 import android.os.Bundle
@@ -11,23 +11,32 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.vincebrees.bitcoinmarket.R
 import com.github.vincebrees.bitcoinmarket.presentation.BaseFragment
-import kotlinx.android.synthetic.main.fragment_market_price.*
+import kotlinx.android.synthetic.main.fragment_chart.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 
-/**
- * Created by Vincent ETIENNE on 22/02/2019.
- */
+class ChartFragment : BaseFragment(){
+    companion object{
+        private const val URL_DATA = "URL_DATA"
 
-class MarketPriceFragment : BaseFragment(){
+        fun newInstance(urlData: String): ChartFragment {
+            val fragment = ChartFragment()
+            val args = Bundle()
+            args.putString(URL_DATA, urlData)
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
-    private val marketPriceViewModel : MarketPriceViewModel by viewModel()
+    private val urlData: String by lazy { arguments?.getString(URL_DATA) ?: "" }
+
+    private val chartViewModel : ChartViewModel by viewModel{ parametersOf(urlData) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_market_price, container, false)
+        return inflater.inflate(R.layout.fragment_chart, container, false)
     }
 
     override fun initUI() {
@@ -37,24 +46,24 @@ class MarketPriceFragment : BaseFragment(){
     }
 
     private fun initSwipeRefresh() {
-        market_price_swipe_refresh.setColorSchemeColors(ContextCompat.getColor(context!!, R.color.colorAccent))
-        market_price_swipe_refresh.setOnRefreshListener {
-            marketPriceViewModel.onRefresh()
+        chart_swipe_refresh.setColorSchemeColors(ContextCompat.getColor(context!!, R.color.colorAccent))
+        chart_swipe_refresh.setOnRefreshListener {
+            chartViewModel.onRefresh()
         }
     }
 
     private fun initButtonListeners() {
-        market_price_btn_filter_30days.setOnClickListener { marketPriceViewModel.onClickedFilter("30days") }
-        market_price_btn_filter_60days.setOnClickListener { marketPriceViewModel.onClickedFilter("60days") }
-        market_price_btn_filter_180days.setOnClickListener { marketPriceViewModel.onClickedFilter("180days") }
-        market_price_btn_filter_1year.setOnClickListener { marketPriceViewModel.onClickedFilter("1year") }
-        market_price_btn_filter_2year.setOnClickListener { marketPriceViewModel.onClickedFilter("2year") }
-        market_price_btn_filter_alltime.setOnClickListener { marketPriceViewModel.onClickedFilter("all") }
+        chart_btn_filter_30days.setOnClickListener { chartViewModel.onClickedFilter("30days") }
+        chart_btn_filter_60days.setOnClickListener { chartViewModel.onClickedFilter("60days") }
+        chart_btn_filter_180days.setOnClickListener { chartViewModel.onClickedFilter("180days") }
+        chart_btn_filter_1year.setOnClickListener { chartViewModel.onClickedFilter("1year") }
+        chart_btn_filter_2year.setOnClickListener { chartViewModel.onClickedFilter("2year") }
+        chart_btn_filter_alltime.setOnClickListener { chartViewModel.onClickedFilter("all") }
 
     }
 
     private fun initChart() {
-        market_price_chart.apply {
+        chart.apply {
             setTouchEnabled(true)
             isDragEnabled = false
             setScaleEnabled(false)
@@ -82,15 +91,15 @@ class MarketPriceFragment : BaseFragment(){
     }
 
     override fun initObserver() {
-        marketPriceViewModel.liveDataMarketPriceViewState.observe(this, Observer{
+        chartViewModel.liveDataChartViewState.observe(this, Observer{
             if(it.isLoading) showLoading() else hideLoading()
             if(it.isError) showError() else hideError()
             if(it.isRefreshError) showToast(getString(R.string.generic_error))
         })
 
-        marketPriceViewModel.liveDataCurveModel.observe(this, Observer {
-            market_price_txt_title.text = it.title
-            market_price_txt_description.text = it.description
+        chartViewModel.liveDataCurveModel.observe(this, Observer {
+            chart_txt_title.text = it.title
+            chart_txt_description.text = it.description
             showChart(it.listValues, it.listFormattedDate)
         })
     }
@@ -110,15 +119,16 @@ class MarketPriceFragment : BaseFragment(){
             setDrawHighlightIndicators(false)
         }
 
-        market_price_chart.apply {
+        chart.apply {
             visibility = View.VISIBLE
-            xAxis.valueFormatter = IAxisValueFormatter { value, axis ->
-                if (value.toInt() > dates.size - 1) {
-                    ""
-                }else{
-                    dates[value.toInt()]
-                }
-            }
+//            xAxis.valueFormatter = IAxisValueFormatter { value, axis ->
+//                if (value.toInt() > dates.size - 1) {
+//                    ""
+//                }else{
+//                    dates[value.toInt()]
+//                }
+//            }
+
             data = LineData(lineDataSet)
             notifyDataSetChanged()
             invalidate()
@@ -126,19 +136,19 @@ class MarketPriceFragment : BaseFragment(){
     }
 
     private fun showLoading() {
-        market_price_loader.show()
+        chart_loader.show()
     }
 
     private fun hideLoading() {
-        market_price_swipe_refresh.isRefreshing = false
-        market_price_loader.hide()
+        chart_swipe_refresh.isRefreshing = false
+        chart_loader.hide()
     }
 
     private fun showError() {
-        market_price_view_error.visibility = View.VISIBLE
+        chart_view_error.visibility = View.VISIBLE
     }
 
     private fun hideError() {
-        market_price_view_error.visibility = View.INVISIBLE
+        chart_view_error.visibility = View.INVISIBLE
     }
 }

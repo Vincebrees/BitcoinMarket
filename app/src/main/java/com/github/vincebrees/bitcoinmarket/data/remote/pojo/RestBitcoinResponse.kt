@@ -2,10 +2,8 @@ package com.github.vincebrees.bitcoinmarket.data.remote.pojo
 
 import com.github.vincebrees.bitcoinmarket.domain.entity.BitcoinResponse
 import com.github.vincebrees.bitcoinmarket.domain.entity.Coordonate
+import com.github.vincebrees.bitcoinmarket.domain.entity.GenericStatus
 
-/**
- * Created by Vincent ETIENNE on 22/02/2019.
- */
 
 data class RestBitcoinResponse(
     var status : String?,
@@ -16,9 +14,9 @@ data class RestBitcoinResponse(
     var values : List<RestCoordonate>?
 )
 
-fun RestBitcoinResponse.toEntity() : BitcoinResponse{
+fun RestBitcoinResponse.toEntity() : BitcoinResponse {
     return BitcoinResponse(
-        status ?: "",
+        GenericStatus.SUCCESS,
         name ?: "",
         unit ?: "",
         period ?: "",

@@ -5,10 +5,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 
-/**
- * Created by Vincent ETIENNE on 22/02/2019.
- */
-
 abstract class BaseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

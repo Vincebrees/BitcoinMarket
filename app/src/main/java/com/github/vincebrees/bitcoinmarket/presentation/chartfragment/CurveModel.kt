@@ -1,10 +1,6 @@
-package com.github.vincebrees.bitcoinmarket.presentation.marketprice
+package com.github.vincebrees.bitcoinmarket.presentation.chartfragment
 
 import com.github.mikephil.charting.data.Entry
-
-/**
- * Created by Vincent ETIENNE on 22/02/2019.
- */
 
 data class CurveModel(
     val title : String,
