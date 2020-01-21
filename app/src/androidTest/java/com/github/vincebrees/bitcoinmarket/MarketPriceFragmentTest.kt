@@ -24,7 +24,7 @@ class MarketPriceFragmentTest{
     //Although, this test is not really useful, I'm aware of that.
     @Test
     fun testClickButton() {
-        onView(withId(R.id.market_price_btn_filter_1year))
+        onView(withId(R.id.chart_btn_filter_180days))
             .perform(click())
     }
 }
